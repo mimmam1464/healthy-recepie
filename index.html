@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="assets/css/Article-Clean.css">
+    <link rel="stylesheet" href="assets/css/Header-Blue.css">
+    <link rel="stylesheet" href="assets/css/Header-Dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/css/Lightbox-Gallery.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Dark.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+</head>
+
+<body style="color: var(--blue);">
+<div id="index" v-if="show">
+    <div style="filter: brightness(102%);">
+        <div class="header-blue"
+             style="color: var(--cyan);background: url(&quot;https://images.unsplash.com/photo-1505935428862-770b6f24f629?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1947&amp;q=80&quot;);">
+            <nav class="navbar navbar-light navbar-expand-md navigation-clean-search">
+                <div class="container-fluid"><a class="navbar-brand" href="#">Healtherape</a>
+                    <button class="navbar-toggler" data-toggle="collapse"><span class="sr-only">Toggle navigation</span><span
+                            class="navbar-toggler-icon"></span></button>
+                </div>
+            </nav>
+            <div class="container hero" style="text-shadow: 4px 2px rgb(8,10,10);background: rgba(60,60,60,0.38);">
+                <div class="row">
+                    <div class="col">
+                        <h1 style="margin: 10px;color: var(--light);"><strong>Get recipes that are perfect for
+                            you!</strong></h1>
+                        <h3 style="margin: 10px;color: var(--white);margin-top: 30px;">Healtherape provides recipes for
+                            you that are perfect in nutrition for your intake.</h3>
+                    </div>
+                </div>
+                <div class="row" style="height: 80px;">
+                    <div class="col offset-lg-5"><a href="#form" class="btn btn-outline-light"
+                                                    style="text-shadow: none">Get Started</a></div>
+                </div>
+            </div>
+            <div class="alert alert-success" role="alert"><span><strong>All formulas are for age 18 and above and are directly from calculator.net. Accuracy of calorie count is not the purpose of this website. It is built to demonstrate and idea and needs several iterations of improvements before actual usage.</strong></span>
+            </div>
+        </div>
+    </div>
+    <div class="login-dark"
+         style="height: 500px;background: url(&quot;https://images.unsplash.com/photo-1606851181064-b7507b24377c?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1050&amp;q=80&quot;) repeat-y;background-size: cover;filter: brightness(80%);">
+        <form id="form" method="post" style="filter: brightness(184%) contrast(142%);background: rgb(30,51,43);">
+            <div class="form-group" style="text-align: center;"><span>Please fill in the details</span></div>
+            <div class="form-group"><input class="form-control" type="number" v-model="age" name="age" min="15" max="80"
+                                           step="1"
+                                           placeholder="Age"></div>
+            <div class="form-group"><input class="form-control" type="number" v-model="weight"
+                                           step="1"
+                                           placeholder="Weight (lbs)"></div>
+            <div class="form-group"><label for="Activity Level">Activity Level</label><select class="form-control"
+                                                                                              v-model="activityLevel">
+                <optgroup label="Activity Level" class="text-dark">
+                    <option value="0" selected="">Sedentary: No Activity</option>
+                    <option value="1">Moderate: Exercise 4-5 mins a week</option>
+                    <option value="2">Exercise Daily</option>
+                </optgroup>
+            </select></div>
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col"><label>Height</label><input class="form-control" type="number" max="9"
+                                                                 placeholder="Feet" v-model="heightFeet"><input
+                            class="form-control"
+                            type="number"
+                            placeholder="Inch" v-model="heightInch" max="12"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input  v-on:click="selectGender(true)"  class="m-2" type="radio" id="contactChoice1"
+                                                          checked       name="contact" value="email">
+                    <label  class="m-2" for="contactChoice1">Male</label>
+
+                    <input  v-on:click="selectGender(false)" class="m-2" type="radio" id="contactChoice2"
+                           name="contact" value="phone">
+                    <label  class="m-2" for="contactChoice2">Female</label></div>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary btn-block" v-on:click="calc()" value="Find Recipe" type="button">
+            </div>
+            <div class="form-group">
+                <p class="text-danger">{{error}}</p>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <hr>
+    <hr>
+    <div class="article-clean">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                    <div class="intro">
+                        <h1 class="text-center">The Calculation</h1>
+                        <p class="text-center">Credits:&nbsp;<br><a
+                                href="https://www.calculator.net/calorie-calculator.html">Calorie Calculator</a><br>https://www.calculator.net/calorie-calculator.com
+                        </p>
+                    </div>
+                    <div class="text">
+                        <p><br>This Calorie Calculator is based on several equations, and the results of the calculator
+                            are based on an estimated average. The Harris-Benedict Equation was one of the earliest
+                            equations used to calculate basal metabolic rate (BMR), which is the amount of energy
+                            expended per day at rest. It was revised in 1984 to be more accurate and was used up until
+                            1990, when the Mifflin-St Jeor Equation was introduced. The Mifflin-St Jeor Equation also
+                            calculates BMR, and has been shown to be more accurate than the revised Harris-Benedict
+                            Equation. The Katch-McArdle Formula is slightly different in that it calculates resting
+                            daily energy expenditure (RDEE), which takes lean body mass into account, something that
+                            neither the Mifflin-St Jeor nor the Harris-Benedict Equation do. Of these equations, the
+                            Mifflin-St Jeor Equation is considered the most accurate equation for calculating BMR with
+                            the exception that the Katch-McArdle Formula can be more accurate for people who are leaner
+                            and know their body fat percentage. The three equations used by the calculator are listed
+                            below:<br><br></p>
+                        <p><br>For men:BMR = 13.397W + 4.799H - 5.677A + 88.3602<br>For women:BMR = 9.247W + 3.098H -
+                            4.330A + 447.593<br><br><br>where:<br>W is body weight in kg<br>H is body height in cm<br>A
+                            is age<br>F is body fat in percentage<br><br></p>
+                    </div>
+                    <div class="text">
+                        <h2>Activity Factor</h2>
+                        <p><br>The value obtained from these equations is the estimated number of calories a person can
+                            consume in a day to maintain their body-weight, assuming they remain at rest. This value is
+                            multiplied by an activity factor (generally 1.2-1.95), dependent on a person's typical
+                            levels of exercise, in order to obtain a more realistic value for maintaining body-weight
+                            (since people are less likely to be at rest throughout the course of an entire day). 1
+                            pound, or approximately 0.45 kg, equates to about 3,500 calories. As such, in order to lose
+                            1 pound per week, it is recommended that 500 calories be shaved off the estimate of calories
+                            necessary for weight maintenance per day. For example, if a person has an estimated
+                            allotment of 2,500 calories per day to maintain body-weight, consuming 2,000 calories per
+                            day for one week would theoretically result in 3,500 calories (or 1 pound) lost during the
+                            period.It is important to remember that proper diet and exercise is largely accepted as the
+                            best way to lose weight. It is inadvisable to lower calorie intake by more than 1,000
+                            calories per day, as losing more than 2 pounds per week can be unhealthy, and can result in
+                            the opposite effect in the near future by reducing metabolism. Losing more than 2 pounds a
+                            week will likely involve muscle loss, which in turn lowers BMR, since more muscle mass
+                            results in higher BMR. Excessive weight loss can also be due to dehydration, which is
+                            unhealthy. Furthermore, particularly when exercising in conjunction with dieting,
+                            maintaining a good diet is important, since the body needs to be able to support its
+                            metabolic processes and replenish itself. Depriving the body of the nutrients it requires as
+                            part of heavily unhealthy diets can have serious detrimental effects, and weight lost in
+                            this manner has been shown in some studies to be unsustainable, since the weight is often
+                            regained in the form of fat (putting the participant in a worse state than when beginning
+                            the diet). As such, in addition to monitoring calorie intake, it is important to maintain
+                            levels of fiber intake as well as other nutritional necessities to balance the needs of the
+                            body.<br><br></p>
+                    </div>
+                    <div class="text">
+                        <h2>Ideal Weight</h2>
+                        <p><br><strong>D. R. Miller Formula (1983)</strong><br>Male:56.2 kg + 1.41 kg per inch over 5
+                            feet<br>Female:53.1 kg + 1.36 kg per inch over 5
+                            feet<br><br><br><strong>Age</strong><br><br>In theory, age shouldn't be a large determinant
+                            of a IBW past the ages of 14-15 for girls and 16-17 for boys, after which most people stop
+                            growing. It is actually expected that human males and females to lose 1.5 and 2 inches in
+                            height respectively by age 70. It is important to remember that as people age, lean muscle
+                            mass decreases and it is easier to accumulate excess body fat. This is a natural process,
+                            though it is possible to lessen the effects of aging by adopting various habits such as
+                            monitoring diet, exercise, stress, and sleep.<br><br><br></p>
+                    </div>
+                    <div class="alert alert-success" role="alert"><span><strong>All formulas are for age 18 and above and are directly from calculator.net. Accuracy of calorie count is not the purpose of this website. It is built to demonstrate and idea and needs several iterations of improvements before actual usage.</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container m-3 text-dark">
+        by Mohammad Immam - 2021
+    </div>
+</div>
+
+<div id="list" v-if="show">
+    <div>
+        <div class="header-dark">
+            <div class="container hero">
+                <div class="row">
+                    <div class="col-6 col-md-6 col-lg   -3 offset-0 offset-md-0 offset-lg-0" style="margin-bottom: 10px;margin-top: 10px;">
+                        <div class="card" style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="card-body" style="margin-bottom: 10px;margin-top: 10px;">
+                                <h5 class="text-center card-title" style="margin-bottom: 10px;margin-top: 10px;">Your Weight<br><br></h5>
+                                <h2 class="text-center text-muted card-subtitle mb-2" style="margin-right: auto;margin-left: auto;margin-bottom: 10px;margin-top: 10px;">{{weight}} lbs</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 offset-0 offset-md-0 offset-lg-0" style="margin-bottom: 10px;margin-top: 10px;">
+                        <div class="card" style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="card-body" style="margin-bottom: 10px;margin-top: 10px;">
+                                <h5 class="text-center card-title" style="margin-bottom: 10px;margin-top: 10px;">Ideal Weight<br><br></h5>
+                                <h2 class="text-center text-muted card-subtitle mb-2" style="margin-right: auto;margin-left: auto;margin-bottom: 10px;margin-top: 10px;">
+                                    {{Math.round(targetWeight * 10) / 10}} lbs</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 offset-0 offset-md-0 offset-lg-0" style="margin-bottom: 10px;margin-top: 10px;">
+                        <div class="card" style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="card-body" style="margin-bottom: 10px;margin-top: 10px;">
+                                <h5 class="text-center card-title" style="margin-bottom: 10px;margin-top: 10px;">Calorie intake/day to maintain weight<br><br></h5>
+                                <h2 class="text-center text-muted card-subtitle mb-2" style="margin-right: auto;margin-left: auto;margin-bottom: 10px;margin-top: 10px;">
+                                    {{Math.round(calculatedCalories * 1) / 1}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 offset-0 offset-md-0 offset-lg-0" style="margin-bottom: 10px;margin-top: 10px;">
+                        <div class="card" style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="card-body" style="margin-bottom: 10px;margin-top: 10px;">
+                                <h5 class="text-center card-title" style="margin-bottom: 10px;margin-top: 10px;">Calorie intake/day to get to target weight<br><br></h5>
+                                <h2 class="text-center text-muted card-subtitle mb-2" style="margin-right: auto;margin-left: auto;margin-bottom: 10px;margin-top: 10px;">
+                                    {{Math.round(targetCalories * 1) / 1}}</h2>
+                                <h5>for  {{Math.round(targetDays * 1) / 1}} days</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">Taking less than 1500 calories per day is not advisable. Please check real dieting apps.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="photo-gallery">
+        <div class="container-fluid">
+            <div class="text-center intro">
+                <h2 class="text-center">Recipes for you</h2>
+            </div>
+
+            <div class="text-left">
+                <h2 class="text-left">Breakfast</h2>
+            </div>
+            <div class="m-2" style="display: flex; flex-direction: row; overflow-x: scroll; height: 50vh;">
+
+                <div v-for="i in breakfastItems" class="col-sm-6 col-md-4 col-lg-3 item" v-on:click="getRecipe(i.id)">
+                    <div class="card"><img class="card-img w-100 d-block" :src="i.image" style="filter: brightness(110%);">
+                         <div class="card-img-overlay text-monospace text-right" style="width: 40%;margin-left: 45%;margin-top: -5%;">
+                             <h4 class="text-center" style="background: #ffffff;border-radius: 5px;padding: 3px;">{{i.nutrition.nutrients[0].amount}}</h4>
+                         </div>
+                    </div>
+                    <div style=""><h4>{{i.title}}</h4></div>
+                </div>
+            </div>
+
+            <div class="text-left">
+                <h2 class="text-left">Lunch</h2>
+            </div>
+            <div class="m-2" style="display: flex; flex-direction: row; overflow-x: scroll; height: 50vh;">
+
+                <div v-for="i in lunchItems" class="col-sm-6 col-md-4 col-lg-3 item" v-on:click="getRecipe(i.id)">
+                    <div class="card"><img class="card-img w-100 d-block" :src="i.image" style="filter: brightness(110%);">
+                        <div class="card-img-overlay text-monospace text-right" style="width: 40%;margin-left: 45%;margin-top: -5%;">
+                            <h4 class="text-center" style="background: #ffffff;border-radius: 5px;padding: 3px;">{{i.nutrition.nutrients[0].amount}}</h4>
+                        </div>
+                    </div>
+                    <div style=""><h4>{{i.title}}</h4></div>
+                </div>
+            </div>
+
+            <div class="text-left">
+                <h2 class="text-left">Dinner</h2>
+            </div>
+            <div class="m-2" style="display: flex; flex-direction: row; overflow-x: scroll; height: 50vh;">
+
+                <div v-for="i in dinnerItems" class="col-sm-6 col-md-4 col-lg-3 item" v-on:click="getRecipe(i.id)">
+                    <div class="card"><img class="card-img w-100 d-block" :src="i.image" style="filter: brightness(110%);">
+                        <div class="card-img-overlay text-monospace text-right" style="width: 40%;margin-left: 45%;margin-top: -5%;">
+                            <h4 class="text-center" style="background: #ffffff;border-radius: 5px;padding: 3px;">{{i.nutrition.nutrients[0].amount}}</h4>
+                        </div>
+                    </div>
+                    <div style=""><h4>{{i.title}}</h4></div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div id="details" v-if="show">
+    <div class="container">
+        <hr>
+        <div class="row">
+            <input class="col offset-md-5 btn btn-success" value="Back Home"  v-on:click="reset()"/>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col"><img :src="recipe.image" width="100%">
+                <hr>
+                <p>Ingredient Count: {{recipe.extendedIngredients.length}}</p>
+                <ul>
+                    <li v-for="ing in recipe.extendedIngredients">{{ing.name}}</li>
+                </ul>
+                <div class="row">
+                    <div class="col offset-md-5"><button class="btn btn-success" type="button">{{recipe.instructions}}</button></div>
+                </div>
+            </div>
+            <div class="col">
+                <h1>{{recipe.title}}</h1>
+                <p>Time to cook: {{recipe.readyInMinutes}} mins</p>
+                <p>Calories: {{recipe.nutrition.nutrients[0].amount}}</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Nutrition</th>
+                            <th>Portion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="n in recipe.nutrition.nutrients">
+                            <td>{{n.name}}</td>
+                            <td>{{n.amount}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
+</body>
+
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="index.js"></script>
+</html>
